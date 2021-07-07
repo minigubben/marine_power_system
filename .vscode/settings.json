@@ -1,6 +1,7 @@
 {
     "stm32-for-vscode.makePath": "gmake",
-    "stm32-for-vscode.armToolchainPath": "",
-    "cortex-debug.armToolchainPath": "",
-    "stm32-for-vscode.openOCDPath": "openocd"
+    "stm32-for-vscode.armToolchainPath": "C:\\PROGRAM FILES (X86)\\GNU ARM EMBEDDED TOOLCHAIN\\10 2020-Q4-MAJOR\\BIN",
+    "cortex-debug.armToolchainPath": "C:\\PROGRAM FILES (X86)\\GNU ARM EMBEDDED TOOLCHAIN\\10 2020-Q4-MAJOR\\BIN",
+    "stm32-for-vscode.openOCDPath": "openocd",
+    "cortex-debug.openocdPath": "openocd"
 }

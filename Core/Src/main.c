@@ -319,7 +319,7 @@ void serialProtocolReciver(uint8_t *message)
 
 void handleData(uint8_t data[], int length)
 {
-    //const unsigned char scene_status[sizeof(scenes)/sizeof(scenes[0])];
+    //const unsigned char scen e_status[sizeof(scenes)/sizeof(scenes[0])];
 
     // To implement: check to see that data matches protocol.
 
@@ -395,26 +395,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   }
 }
 
-//	void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-//	{
-//		//uint8_t comp[] = 'test';
-//		//if(strcmp((char*) rx_buffer, (char*)'test') == 0) {
-//		char one = rx_buffer[0];
-//		char two = rx_buffer[1];
-//		char three = rx_buffer[2];
-//		char four = rx_buffer[3];
-//		if (rx_buffer[0] == 't' && rx_buffer[1] == 'e' && rx_buffer[2] == 's' && rx_buffer[3] == 't') {
-//		//if (sizeof(rx_buffer) == 4) {
-//			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-//		}
-//		HAL_UART_Receive_DMA(&huart2, rx_buffer, 4);
-//	}
-
-
-  void resetUart()
-  {
-	  HAL_UART_Receive_DMA(&huart2, rx_buffer, 5);
-  }
 /* USER CODE END 4 */
 
 /**

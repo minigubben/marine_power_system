@@ -4,7 +4,7 @@
             "showDevDebugOutput": true,
             "cwd": "${workspaceRoot}",
             "executable": "./build/bat_8_ut_reciver.elf",
-            "name": "Debug STM32",
+                          "name": "Debug STM32",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "openocd",

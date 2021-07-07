@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 1
 
 
    1              		.cpu cortex-m0
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
   29:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   * @{
   30:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   */
   31:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c **** 
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 2
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 2
 
 
   32:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c **** #ifdef HAL_RCC_MODULE_ENABLED
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
   86:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c **** @endverbatim
   87:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   * @{
   88:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   */
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 3
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 3
 
 
   89:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c **** 
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
   54              		.loc 1 116 5 is_stmt 1 view .LVU7
  117:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     
  118:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     FlagStatus       pwrclkchanged = RESET;
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 4
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 4
 
 
   55              		.loc 1 118 5 view .LVU8
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
   98              	.L4:
  130:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     {
  131:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       /* Enable write access to Backup domain */
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 5
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 5
 
 
  132:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       SET_BIT(PWR->CR, PWR_CR_DBP);
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  131 0058 3143     		orrs	r1, r6
  132 005a 1962     		str	r1, [r3, #32]
  154:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       __HAL_RCC_BACKUPRESET_RELEASE();
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 6
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 6
 
 
  133              		.loc 1 154 7 view .LVU35
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  179:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       __HAL_RCC_PWR_CLK_DISABLE();
  180:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     }
  181:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   }
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 7
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 7
 
 
  182:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c **** 
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  178              		.loc 1 220 3 view .LVU48
  179              		.loc 1 220 5 is_stmt 0 view .LVU49
  180 0090 2368     		ldr	r3, [r4]
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 8
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 8
 
 
  181 0092 9B06     		lsls	r3, r3, #26
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  249:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     assert_param(IS_RCC_CECCLKSOURCE(PeriphClkInit->CecClockSelection));
  250:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     
  251:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     /* Configure the CEC clock source */
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 9
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 9
 
 
  252:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     __HAL_RCC_CEC_CONFIG(PeriphClkInit->CecClockSelection);
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  243              	.LVL15:
  139:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****         {
  244              		.loc 1 139 27 view .LVU67
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 10
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 10
 
 
  245 00de 801B     		subs	r0, r0, r6
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  179:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     }
  285              		.loc 1 179 7 is_stmt 1 view .LVU82
  286 0106 D369     		ldr	r3, [r2, #28]
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 11
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 11
 
 
  287 0108 0849     		ldr	r1, .L20+20
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  330              		@ frame_needed = 0, uses_anonymous_args = 0
  331              		@ link register save eliminated.
  272:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   /* Set all possible values for the extended clock type parameter------------*/
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 12
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 12
 
 
  273:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   /* Common part first */
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  361 0020 054A     		ldr	r2, .L23+8
  362 0022 0260     		str	r2, [r0]
  298:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   /* Get the USB clock source ---------------------------------------------*/
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 13
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 13
 
 
  299:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   PeriphClkInit->UsbClockSelection = __HAL_RCC_GET_USB_SOURCE();
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  324:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   @if STM32F042x6
  325:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_USB     USB peripheral clock
  326:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   *            @arg @ref RCC_PERIPHCLK_CEC     CEC peripheral clock
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 14
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 14
 
 
  327:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   @endif
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  403              		.cfi_offset 14, -4
  372:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   /* frequency == 0 : means that no available frequency for the peripheral */
  373:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   uint32_t frequency = 0U;
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 15
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 15
 
 
  404              		.loc 1 373 3 is_stmt 1 view .LVU107
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  411:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c **** 
  412:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       /* Check if USART1 clock selection is PCLK1 */
  413:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       if (srcclk == RCC_USART1CLKSOURCE_PCLK1)
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 16
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 16
 
 
  414:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       {
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  468:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c **** 
  469:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       /* Check if USART3 clock selection is PCLK1 */
  470:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       if (srcclk == RCC_USART3CLKSOURCE_PCLK1)
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 17
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 17
 
 
  471:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       {
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  501:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       }
  502:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       /* Check if I2C1 clock selection is SYSCLK */
  503:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       else if (srcclk == RCC_I2C1CLKSOURCE_SYSCLK)
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 18
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 18
 
 
  445              		.loc 1 503 12 is_stmt 1 view .LVU120
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  483 0050 21D0     		beq	.L25
  484              		.loc 1 516 48 discriminator 1 view .LVU134
  485 0052 3C4B     		ldr	r3, .L57
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 19
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 19
 
 
  486 0054 1A68     		ldr	r2, [r3]
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  532              		.loc 1 524 12 view .LVU153
  533 0080 9342     		cmp	r3, r2
  534 0082 58D0     		beq	.L49
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 20
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 20
 
 
  525:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****         {
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  558:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   case RCC_PERIPHCLK_CEC:
  559:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****     {
  560:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       /* Get the current CEC source */
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 21
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 21
 
 
  561:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       srcclk = __HAL_RCC_GET_CEC_SOURCE();
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  580 00ae 9342     		cmp	r3, r2
  581 00b0 0CD0     		beq	.L51
  582              	.L33:
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 22
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 22
 
 
  401:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       {
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  624 00d8 1A4B     		ldr	r3, .L57
  625              	.LVL52:
  401:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       {
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 23
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 23
 
 
  626              		.loc 1 401 59 discriminator 1 view .LVU180
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  666 0102 0229     		cmp	r1, #2
  667 0104 0DD0     		beq	.L56
  373:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****   
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 24
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 24
 
 
  668              		.loc 1 373 12 view .LVU195
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  428:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       {
  710              		.loc 1 428 56 discriminator 1 view .LVU208
  711 012a 1840     		ands	r0, r3
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 25
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 25
 
 
  428:Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_rcc_ex.c ****       {
@@ -1496,20 +1496,20 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 1
  756              		.file 7 "Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_rcc_ex.h"
  757              		.file 8 "Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_rcc.h"
  758              		.file 9 "Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h"
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s 			page 26
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s 			page 26
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 stm32f0xx_hal_rcc_ex.c
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:16     .text.HAL_RCCEx_PeriphCLKConfig:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:24     .text.HAL_RCCEx_PeriphCLKConfig:00000000 HAL_RCCEx_PeriphCLKConfig
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:307    .text.HAL_RCCEx_PeriphCLKConfig:00000118 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:317    .text.HAL_RCCEx_GetPeriphCLKConfig:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:324    .text.HAL_RCCEx_GetPeriphCLKConfig:00000000 HAL_RCCEx_GetPeriphCLKConfig
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:376    .text.HAL_RCCEx_GetPeriphCLKConfig:00000030 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:384    .text.HAL_RCCEx_GetPeriphCLKFreq:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:391    .text.HAL_RCCEx_GetPeriphCLKFreq:00000000 HAL_RCCEx_GetPeriphCLKFreq
-C:\Users\MINIGU~1\AppData\Local\Temp\ccgmdHd6.s:742    .text.HAL_RCCEx_GetPeriphCLKFreq:00000144 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:16     .text.HAL_RCCEx_PeriphCLKConfig:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:24     .text.HAL_RCCEx_PeriphCLKConfig:00000000 HAL_RCCEx_PeriphCLKConfig
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:307    .text.HAL_RCCEx_PeriphCLKConfig:00000118 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:317    .text.HAL_RCCEx_GetPeriphCLKConfig:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:324    .text.HAL_RCCEx_GetPeriphCLKConfig:00000000 HAL_RCCEx_GetPeriphCLKConfig
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:376    .text.HAL_RCCEx_GetPeriphCLKConfig:00000030 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:384    .text.HAL_RCCEx_GetPeriphCLKFreq:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:391    .text.HAL_RCCEx_GetPeriphCLKFreq:00000000 HAL_RCCEx_GetPeriphCLKFreq
+C:\Users\MINIGU~1\AppData\Local\Temp\ccbe3pku.s:742    .text.HAL_RCCEx_GetPeriphCLKFreq:00000144 $d
 
 UNDEFINED SYMBOLS
 HAL_GetTick
