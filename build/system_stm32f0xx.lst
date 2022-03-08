@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 1
 
 
    1              		.cpu cortex-m0
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
   30:Core/Src/system_stm32f0xx.c ****   * License. You may obtain a copy of the License at:
   31:Core/Src/system_stm32f0xx.c ****   *                        opensource.org/licenses/BSD-3-Clause
   32:Core/Src/system_stm32f0xx.c ****   *
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 2
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 2
 
 
   33:Core/Src/system_stm32f0xx.c ****   ******************************************************************************
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
   87:Core/Src/system_stm32f0xx.c **** /**
   88:Core/Src/system_stm32f0xx.c ****   * @}
   89:Core/Src/system_stm32f0xx.c ****   */
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 3
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 3
 
 
   90:Core/Src/system_stm32f0xx.c **** 
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
   34 0000 7047     		bx	lr
   35              		.cfi_endproc
   36              	.LFE40:
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 4
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 4
 
 
   38              		.global	__aeabi_uidiv
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
   54              	.LCFI0:
   55              		.cfi_def_cfa_offset 8
   56              		.cfi_offset 4, -8
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 5
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 5
 
 
   57              		.cfi_offset 14, -4
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
  212:Core/Src/system_stm32f0xx.c ****  || defined(STM32F070xB) || defined(STM32F091xC) || defined(STM32F098xx)  || defined(STM32F030xC)
  213:Core/Src/system_stm32f0xx.c ****         /* HSI used as PLL clock source : SystemCoreClock = HSI/PREDIV * PLLMUL */
  214:Core/Src/system_stm32f0xx.c ****         SystemCoreClock = (HSI_VALUE/predivfactor) * pllmull;
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 6
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 6
 
 
  215:Core/Src/system_stm32f0xx.c **** #else
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
  109 002e 184A     		ldr	r2, .L10+12
  110 0030 D35C     		ldrb	r3, [r2, r3]
  111              	.LVL8:
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 7
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 7
 
 
  230:Core/Src/system_stm32f0xx.c ****   /* HCLK clock frequency */
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
  151              		.loc 1 193 27 is_stmt 0 view .LVU36
  152 0050 A40C     		lsrs	r4, r4, #18
  153              	.LVL16:
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 8
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 8
 
 
  193:Core/Src/system_stm32f0xx.c ****       predivfactor = (RCC->CFGR2 & RCC_CFGR2_PREDIV) + 1;
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
  193              		.loc 1 199 52 view .LVU51
  194 007a 4443     		muls	r4, r0
  195              	.LVL23:
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 9
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 9
 
 
  199:Core/Src/system_stm32f0xx.c ****       }
@@ -523,22 +523,22 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 1
  237              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2020-q4-major\\arm-none-eabi\\inc
  238              		.file 4 "Drivers/CMSIS/Device/ST/STM32F0xx/Include/system_stm32f0xx.h"
  239              		.file 5 "Drivers/CMSIS/Device/ST/STM32F0xx/Include/stm32f070x6.h"
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s 			page 10
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s 			page 10
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 system_stm32f0xx.c
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:16     .text.SystemInit:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:24     .text.SystemInit:00000000 SystemInit
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:40     .text.SystemCoreClockUpdate:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:47     .text.SystemCoreClockUpdate:00000000 SystemCoreClockUpdate
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:203    .text.SystemCoreClockUpdate:00000084 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:232    .rodata.APBPrescTable:00000000 APBPrescTable
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:225    .rodata.AHBPrescTable:00000000 AHBPrescTable
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:218    .data.SystemCoreClock:00000000 SystemCoreClock
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:214    .data.SystemCoreClock:00000000 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:221    .rodata.AHBPrescTable:00000000 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\cc68I7LT.s:229    .rodata.APBPrescTable:00000000 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:16     .text.SystemInit:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:24     .text.SystemInit:00000000 SystemInit
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:40     .text.SystemCoreClockUpdate:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:47     .text.SystemCoreClockUpdate:00000000 SystemCoreClockUpdate
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:203    .text.SystemCoreClockUpdate:00000084 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:232    .rodata.APBPrescTable:00000000 APBPrescTable
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:225    .rodata.AHBPrescTable:00000000 AHBPrescTable
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:218    .data.SystemCoreClock:00000000 SystemCoreClock
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:214    .data.SystemCoreClock:00000000 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:221    .rodata.AHBPrescTable:00000000 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\cceoPTdn.s:229    .rodata.APBPrescTable:00000000 $d
 
 UNDEFINED SYMBOLS
 __aeabi_uidiv

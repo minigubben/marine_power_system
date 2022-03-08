@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 1
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s 			page 1
 
 
    1              		.cpu cortex-m0
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 1
   56 0038 5A69     		ldr	r2, [r3, #20]
   57 003a 8021     		movs	r1, #128
   58 003c C902     		lsls	r1, r1, #11
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 2
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s 			page 2
 
 
   59 003e 0A43     		orrs	r2, r1
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 1
  114              		.thumb_func
  115              		.fpu softvfp
  117              	Error_Handler:
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 3
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s 			page 3
 
 
  118              		.fnstart
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 1
  174              	.L8:
  175 0034 FFF7FEFF 		bl	Error_Handler
  176              	.L10:
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 4
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s 			page 4
 
 
  177              		.align	2
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 1
  233 004a FFF7FEFF 		bl	Error_Handler
  234              	.L15:
  235 004e FFF7FEFF 		bl	Error_Handler
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 5
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s 			page 5
 
 
  236              		.fnend
@@ -262,55 +262,43 @@ ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 1
  256 000e FFF7FEFF 		bl	_ZL19MX_USART2_UART_Initv
  257 0012 FFF7FEFF 		bl	_Z10marineMainv
  258              	.L17:
- 259 0016 8021     		movs	r1, #128
- 260 0018 8900     		lsls	r1, r1, #2
- 261 001a 0448     		ldr	r0, .L18
- 262 001c FFF7FEFF 		bl	HAL_GPIO_TogglePin
- 263 0020 FA20     		movs	r0, #250
- 264 0022 4000     		lsls	r0, r0, #1
- 265 0024 FFF7FEFF 		bl	HAL_Delay
- 266 0028 F5E7     		b	.L17
- 267              	.L19:
- 268 002a C046     		.align	2
- 269              	.L18:
- 270 002c 00040048 		.word	1207960576
- 271              		.fnend
- 273              		.global	huart2
- 274              		.section	.bss.huart2,"aw",%nobits
- 275              		.align	2
- 278              	huart2:
- 279 0000 00000000 		.space	132
- 279      00000000 
- 279      00000000 
- 279      00000000 
- 279      00000000 
- 280              		.ident	"GCC: (GNU Arm Embedded Toolchain 10-2020-q4-major) 10.2.1 20201103 (release)"
-ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s 			page 6
+ 259 0016 FEE7     		b	.L17
+ 260              		.fnend
+ 262              		.global	huart2
+ 263              		.section	.bss.huart2,"aw",%nobits
+ 264              		.align	2
+ 267              	huart2:
+ 268 0000 00000000 		.space	132
+ 268      00000000 
+ 268      00000000 
+ 268      00000000 
+ 268      00000000 
+ 269              		.ident	"GCC: (GNU Arm Embedded Toolchain 10-2020-q4-major) 10.2.1 20201103 (release)"
+ARM GAS  C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.cpp
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:14     .text._ZL12MX_GPIO_Initv:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:21     .text._ZL12MX_GPIO_Initv:00000000 _ZL12MX_GPIO_Initv
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:104    .text._ZL12MX_GPIO_Initv:00000098 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:14     .text._ZL12MX_GPIO_Initv:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:21     .text._ZL12MX_GPIO_Initv:00000000 _ZL12MX_GPIO_Initv
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:104    .text._ZL12MX_GPIO_Initv:00000098 $d
 .ARM.extab.text._ZL12MX_GPIO_Initv:00000000 $d
 .ARM.exidx.text._ZL12MX_GPIO_Initv:00000000 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:110    .text.Error_Handler:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:117    .text.Error_Handler:00000000 Error_Handler
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:110    .text.Error_Handler:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:117    .text.Error_Handler:00000000 Error_Handler
     .ARM.exidx.text.Error_Handler:00000000 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:136    .text._ZL19MX_USART2_UART_Initv:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:142    .text._ZL19MX_USART2_UART_Initv:00000000 _ZL19MX_USART2_UART_Initv
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:179    .text._ZL19MX_USART2_UART_Initv:00000038 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:278    .bss.huart2:00000000 huart2
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:136    .text._ZL19MX_USART2_UART_Initv:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:142    .text._ZL19MX_USART2_UART_Initv:00000000 _ZL19MX_USART2_UART_Initv
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:179    .text._ZL19MX_USART2_UART_Initv:00000038 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:267    .bss.huart2:00000000 huart2
 .ARM.exidx.text._ZL19MX_USART2_UART_Initv:00000000 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:184    .text._Z18SystemClock_Configv:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:191    .text._Z18SystemClock_Configv:00000000 _Z18SystemClock_Configv
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:184    .text._Z18SystemClock_Configv:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:191    .text._Z18SystemClock_Configv:00000000 _Z18SystemClock_Configv
 .ARM.exidx.text._Z18SystemClock_Configv:00000000 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:239    .text.main:00000000 $t
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:246    .text.main:00000000 main
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:270    .text.main:0000002c $d
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:239    .text.main:00000000 $t
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:246    .text.main:00000000 main
              .ARM.exidx.text.main:00000000 $d
-C:\Users\MINIGU~1\AppData\Local\Temp\ccmnKgrf.s:275    .bss.huart2:00000000 $d
+C:\Users\MINIGU~1\AppData\Local\Temp\cc4Q9Ueg.s:264    .bss.huart2:00000000 $d
 
 UNDEFINED SYMBOLS
 memset
@@ -323,5 +311,3 @@ HAL_RCC_OscConfig
 HAL_RCC_ClockConfig
 HAL_Init
 _Z10marineMainv
-HAL_GPIO_TogglePin
-HAL_Delay
