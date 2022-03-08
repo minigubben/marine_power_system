@@ -4,4 +4,9 @@
     "cortex-debug.armToolchainPath": "C:\\PROGRAM FILES (X86)\\GNU ARM EMBEDDED TOOLCHAIN\\10 2020-Q4-MAJOR\\BIN",
     "stm32-for-vscode.openOCDPath": "openocd",
     "cortex-debug.openocdPath": "openocd"
+    // "files.associations": {
+    //     "marine_controller.cpp": "c",
+    //     "stm32f0xx_hal.h": "c",
+    //     "marine_controller.h": "c"
+    // }
 }
