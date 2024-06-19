@@ -1,20 +1,16 @@
 {
-  "configurations": [
-    {
-      "name": "STM32",
-      "includePath": [
-        "Core/Inc",
-        "Drivers/CMSIS/Device/ST/STM32F0xx/Include",
-        "Drivers/CMSIS/Include",
-        "Drivers/STM32F0xx_HAL_Driver/Inc",
-        "Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"
-      ],
-      "defines": [
-        "STM32F070x6",
-        "USE_HAL_DRIVER"
-      ],
-      "compilerPath": "/home/minigubben/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-none-eabi-gcc/11.2.1-1.2.2/.content/bin/arm-none-eabi-gcc"
-    }
-  ],
-  "version": 4
+    "version": 4,
+    "configurations": [
+        {
+            /** 
+             * ms-vscode.cmake-tools plugin should be installed.
+             * 
+             * It provides data for C/C++ plugin,
+             * such as include paths, browse paths, defines, etc.
+             */
+            "name": "STM32",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "intelliSenseMode": "${default}"
+        }
+    ]
 }
