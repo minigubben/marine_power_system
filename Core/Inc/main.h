@@ -66,6 +66,7 @@ void Error_Handler(void);
 #define Output_3_GPIO_Port GPIOB
 #define Output_2_Pin GPIO_PIN_9
 #define Output_2_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
