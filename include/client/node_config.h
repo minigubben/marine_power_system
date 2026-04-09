@@ -7,12 +7,22 @@
 #define NODE_ID 10U
 #endif
 
+#if defined(NODE_BOARD_INPUT_PANEL)
+
 #ifndef NODE_HAS_INPUTS
 #define NODE_HAS_INPUTS 1U
 #endif
 
 #ifndef NODE_HAS_OUTPUTS
 #define NODE_HAS_OUTPUTS 1U
+#endif
+
+#ifndef NODE_INPUT_COUNT
+#define NODE_INPUT_COUNT 6U
+#endif
+
+#ifndef NODE_OUTPUT_COUNT
+#define NODE_OUTPUT_COUNT 6U
 #endif
 
 #ifndef NODE_BUTTON_1_ID
@@ -135,6 +145,28 @@
 #define NODE_BUTTON_6_ACTIVE_STATE GPIO_PIN_RESET
 #endif
 
+#elif defined(NODE_BOARD_OUTPUT_8CH)
+
+#ifndef NODE_HAS_INPUTS
+#define NODE_HAS_INPUTS 0U
+#endif
+
+#ifndef NODE_HAS_OUTPUTS
+#define NODE_HAS_OUTPUTS 1U
+#endif
+
+#ifndef NODE_INPUT_COUNT
+#define NODE_INPUT_COUNT 0U
+#endif
+
+#ifndef NODE_OUTPUT_COUNT
+#define NODE_OUTPUT_COUNT 8U
+#endif
+
+#else
+#error "Unsupported node board profile"
+#endif
+
 #ifndef NODE_BUTTON_DEBOUNCE_MS
 #define NODE_BUTTON_DEBOUNCE_MS 40U
 #endif
@@ -209,6 +241,34 @@
 
 #ifndef NODE_OUTPUT_6_PIN
 #define NODE_OUTPUT_6_PIN Output_6_Pin
+#endif
+
+#if NODE_OUTPUT_COUNT >= 7U
+#ifndef NODE_OUTPUT_7_ID
+#define NODE_OUTPUT_7_ID 7U
+#endif
+
+#ifndef NODE_OUTPUT_7_PORT
+#define NODE_OUTPUT_7_PORT Output_7_GPIO_Port
+#endif
+
+#ifndef NODE_OUTPUT_7_PIN
+#define NODE_OUTPUT_7_PIN Output_7_Pin
+#endif
+#endif
+
+#if NODE_OUTPUT_COUNT >= 8U
+#ifndef NODE_OUTPUT_8_ID
+#define NODE_OUTPUT_8_ID 8U
+#endif
+
+#ifndef NODE_OUTPUT_8_PORT
+#define NODE_OUTPUT_8_PORT Output_8_GPIO_Port
+#endif
+
+#ifndef NODE_OUTPUT_8_PIN
+#define NODE_OUTPUT_8_PIN Output_8_Pin
+#endif
 #endif
 
 #ifndef NODE_OUTPUT_ACTIVE_STATE

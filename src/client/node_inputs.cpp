@@ -14,6 +14,7 @@ typedef struct
     GPIO_PinState active_state;
 } NodeInputMapping;
 
+#if NODE_HAS_INPUTS != 0U
 static const NodeInputMapping node_input_mappings[] = {
     {NODE_BUTTON_1_ID, NODE_BUTTON_1_GPIO_Port, NODE_BUTTON_1_Pin, NODE_BUTTON_1_PULL_MODE, NODE_BUTTON_1_ACTIVE_STATE},
     {NODE_BUTTON_2_ID, NODE_BUTTON_2_GPIO_Port, NODE_BUTTON_2_Pin, NODE_BUTTON_2_PULL_MODE, NODE_BUTTON_2_ACTIVE_STATE},
@@ -31,15 +32,17 @@ static GPIO_PinState node_inputs_read_button(size_t index)
 {
     return HAL_GPIO_ReadPin(node_input_mappings[index].port, node_input_mappings[index].pin);
 }
+#endif
 
 void node_inputs_init(void)
 {
-    GPIO_InitTypeDef gpio_init = {0};
-
     if (NODE_HAS_INPUTS == 0U)
     {
         return;
     }
+
+#if NODE_HAS_INPUTS != 0U
+    GPIO_InitTypeDef gpio_init = {0};
 
     for (size_t i = 0U; i < (sizeof(node_input_mappings) / sizeof(node_input_mappings[0])); ++i)
     {
@@ -52,6 +55,7 @@ void node_inputs_init(void)
         node_stable_button_states[i] = node_last_raw_button_states[i];
         node_last_button_change_ticks[i] = HAL_GetTick();
     }
+#endif
 }
 
 bool node_inputs_poll_button_press(button_id_t *button_id_out)
@@ -61,6 +65,7 @@ bool node_inputs_poll_button_press(button_id_t *button_id_out)
         return false;
     }
 
+#if NODE_HAS_INPUTS != 0U
     for (size_t i = 0U; i < (sizeof(node_input_mappings) / sizeof(node_input_mappings[0])); ++i)
     {
         const GPIO_PinState raw_state = node_inputs_read_button(i);
@@ -85,6 +90,7 @@ bool node_inputs_poll_button_press(button_id_t *button_id_out)
             return node_stable_button_states[i] == node_input_mappings[i].active_state;
         }
     }
+#endif
 
     return false;
 }

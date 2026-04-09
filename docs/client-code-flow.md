@@ -1,6 +1,6 @@
 # Client Firmware Code Flow
 
-This document describes the current runtime behavior of the node firmware in `src/client`.
+This document describes the current runtime behavior of the shared node firmware in `src/client`.
 
 ## Scope
 
@@ -29,12 +29,17 @@ Shared STM32 configuration comes from:
 
 The archived STM32CubeMX export remains under `legacy/cubemx/client`, but it is no longer part of the active build.
 
+The same source tree is built into two board profiles:
+
+- `client` / `output`: 8-output card
+- `node`: input-panel card with 6 inputs and 6 status outputs
+
 The implemented behavior is centered around UART receive interrupts on `USART2`, the shared protocol parser in `include/shared/protocol.h`, and separate bus/input/output modules.
 
 ## Module Map
 
 - `src/client/main.c`: boot sequence and handoff into `node_app`
-- `include/client/main.h`: input, output, and RS485 pin definitions
+- `include/client/main.h`: board-profile-specific input, output, and RS485 pin definitions
 - `src/client/node_app.cpp`: application orchestration
 - `src/client/node_bus.cpp`: UART receive callback and RS485 transmit path
 - `src/client/node_inputs.cpp`: local button GPIO init and debounce
@@ -74,8 +79,7 @@ The PlatformIO STM32Cube startup code enters `main()`, then `HAL_Init()` sets up
 
 `SystemClock_Config()` selects HSI with no PLL. The code then initializes:
 
-- GPIOA and GPIOB clocks
-- six LED/status output pins
+- GPIO and output pins according to the selected board profile
 - one RS485 transmit-enable pin
 - `USART2` at `115200`, `9` data bits, even parity, `1` stop bit
 
@@ -94,7 +98,7 @@ After peripheral init, `main()` calls `node_app_init(&huart2)`, then stays in a 
 `node_app_process()`:
 
 1. applies one pending received frame, if available
-2. polls for a debounced local button press across six local inputs, if inputs are enabled
+2. polls for a debounced local button press across the configured local inputs, if inputs are enabled
 3. sends a `PROTOCOL_CMD_BUTTON_PRESSED` frame when a local press is detected
 4. delays for 10 ms before the next polling iteration
 
@@ -142,14 +146,23 @@ The actual GPIO write is isolated in `node_outputs.cpp`.
 
 ## Pin-Level Behavior
 
-From `main.h`, the node exposes:
+The UART pin mux is common across both board profiles:
 
-- `USART2_TX` on `PA2` and `USART2_RX` on `PA3`
+- `USART2_TX` on `PA2`
+- `USART2_RX` on `PA3`
+
+Input-panel profile (`pio run -e node`):
+
 - `RS485_TX_EN_Pin` on `PA7`
 - outputs `OUT1..OUT6` on `PA12`, `PA8`, `PB14`, `PB12`, `PB10`, `PB1`
 - inputs `IN1..IN6` on `PA11`, `PB15`, `PB13`, `PB11`, `PB2`, `PB0`
 
-Application code touches the LED/status outputs through `node_outputs.cpp`, debounces the six local inputs in `node_inputs.cpp`, and manages RS485 transmit direction in `node_bus.cpp`.
+8-output profile (`pio run -e client` or `pio run -e output`):
+
+- `RS485_TX_EN_Pin` on `PB10`
+- outputs `C1..C8` on `PC13`, `PB9`, `PB8`, `PB7`, `PB6`, `PB5`, `PB4`, `PA15`
+
+Application code touches the configured outputs through `node_outputs.cpp`, debounces local inputs when the selected board profile has them, and manages RS485 transmit direction in `node_bus.cpp`.
 
 ## Known Constraints In The Current Flow
 

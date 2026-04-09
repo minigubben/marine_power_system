@@ -35,6 +35,7 @@ Build one target:
 ```sh
 pio run -e controller
 pio run -e client
+pio run -e node
 ```
 
 The root `Makefile` provides the same build entrypoints:
@@ -53,6 +54,7 @@ Upload with ST-Link:
 ```sh
 pio run -e controller -t upload
 pio run -e client -t upload
+pio run -e node -t upload
 ```
 
 Start a debug session:
@@ -63,6 +65,11 @@ pio debug -e client
 ```
 
 PlatformIO uses the repo-local custom board definition in `boards/marine_stm32f070c6tx.json` and the shared linker script in `ldscripts/STM32F070C6Tx_FLASH.ld`.
+
+Node firmware environments:
+
+- `client` / `output`: 8-output card profile
+- `node`: input-panel profile with 6 inputs and 6 scene-status LEDs
 
 ## Documentation
 

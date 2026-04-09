@@ -191,6 +191,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+#if defined(NODE_BOARD_INPUT_PANEL)
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
@@ -213,6 +214,43 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#elif defined(NODE_BOARD_OUTPUT_8CH)
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(Output_1_GPIO_Port, Output_1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, Output_8_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, Output_7_Pin|Output_6_Pin|Output_5_Pin|Output_4_Pin|Output_3_Pin|Output_2_Pin|RS485_TX_EN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : Output_1_Pin */
+  GPIO_InitStruct.Pin = Output_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(Output_1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Output_8_Pin */
+  GPIO_InitStruct.Pin = Output_8_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(Output_8_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : Output_7_Pin Output_6_Pin Output_5_Pin Output_4_Pin Output_3_Pin Output_2_Pin RS485_TX_EN_Pin */
+  GPIO_InitStruct.Pin = Output_7_Pin|Output_6_Pin|Output_5_Pin|Output_4_Pin|Output_3_Pin|Output_2_Pin|RS485_TX_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#else
+#error "Unsupported node board profile"
+#endif
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

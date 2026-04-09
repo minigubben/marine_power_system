@@ -58,6 +58,7 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#if defined(NODE_BOARD_INPUT_PANEL)
 #define RS485_TX_EN_Pin GPIO_PIN_7
 #define RS485_TX_EN_GPIO_Port GPIOA
 #define Output_2_Pin GPIO_PIN_8
@@ -84,6 +85,28 @@ void Error_Handler(void);
 #define Output_3_GPIO_Port GPIOB
 #define Input_2_Pin GPIO_PIN_15
 #define Input_2_GPIO_Port GPIOB
+#elif defined(NODE_BOARD_OUTPUT_8CH)
+#define Output_1_Pin GPIO_PIN_13
+#define Output_1_GPIO_Port GPIOC
+#define Output_8_Pin GPIO_PIN_15
+#define Output_8_GPIO_Port GPIOA
+#define Output_7_Pin GPIO_PIN_4
+#define Output_7_GPIO_Port GPIOB
+#define Output_6_Pin GPIO_PIN_5
+#define Output_6_GPIO_Port GPIOB
+#define Output_5_Pin GPIO_PIN_6
+#define Output_5_GPIO_Port GPIOB
+#define Output_4_Pin GPIO_PIN_7
+#define Output_4_GPIO_Port GPIOB
+#define Output_3_Pin GPIO_PIN_8
+#define Output_3_GPIO_Port GPIOB
+#define Output_2_Pin GPIO_PIN_9
+#define Output_2_GPIO_Port GPIOB
+#define RS485_TX_EN_Pin GPIO_PIN_10
+#define RS485_TX_EN_GPIO_Port GPIOB
+#else
+#error "Define NODE_BOARD_INPUT_PANEL or NODE_BOARD_OUTPUT_8CH in the PlatformIO environment"
+#endif
 
 /* USER CODE BEGIN Private defines */
 
