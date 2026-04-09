@@ -6,6 +6,8 @@ This repository combines the two STM32 firmware projects that make up the marine
 
 - `projects/controller`: controller firmware, imported from `marine_power_controller_master_firmware`
 - `projects/client`: client firmware, imported from `marine_power_controller_8out_firmware`
+- `docs/controller-code-flow.md`: controller runtime walkthrough
+- `docs/client-code-flow.md`: client runtime walkthrough
 
 Each project keeps its existing `Makefile`, `CMakeLists.txt`, STM32CubeMX files, and local `.vscode` settings.
 
@@ -34,6 +36,13 @@ You can also continue working inside each project directory directly:
 
 - `projects/controller`
 - `projects/client`
+
+## Documentation
+
+Code flow documents:
+
+- `docs/controller-code-flow.md`
+- `docs/client-code-flow.md`
 
 ## History
 
