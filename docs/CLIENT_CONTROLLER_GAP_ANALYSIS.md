@@ -4,58 +4,63 @@ Date: 2026-04-09
 
 ## Scope
 
-This review compares the two firmware projects in this repository:
+This review compares the two active firmware targets in this repository:
 
-- `projects/client`
-- `projects/controller`
+- `src/client`
+- `src/controller`
 
-The focus is the functional contract between them, especially serial/RS485 communication, scene handling, and build integration.
+The focus is the functional contract between them, especially serial/RS485 communication and scene handling. Build integration is included only where it affects the current executable artifacts.
 
 ## Executive Summary
 
-The client and controller are not aligned enough to work as a complete system yet.
+The PlatformIO migration fixed the earlier build-definition drift, but the two firmware targets are still not aligned enough to work as a complete system.
 
-The biggest gap is that the client contains a draft receive-side protocol/parser, while the controller contains no corresponding transport, parser, command encoder, or scene engine. In practice, the client looks like an experimental node implementation and the controller looks like a CubeMX-generated skeleton with a scene data structure stub.
+The biggest gap is still architectural: the client contains a draft receive-side protocol/parser, while the controller contains no corresponding transport, parser, command encoder, or scene engine. In practice, the client looks like an experimental node implementation and the controller still looks like a startup skeleton with a scene data structure stub.
 
-There is also build-system drift on the client side: the custom client logic is referenced from application code but is missing from the active Makefile and CMake source lists. Even before protocol compatibility is solved, the build definitions need to be made consistent.
+## Current State
+
+- The active firmware builds are now defined in `platformio.ini`.
+- `pio run -e controller` builds the controller target and includes `src/controller/scenes.c`.
+- `pio run -e client` builds the client target and includes `src/client/marine_controller.cpp`.
+- The old STM32CubeMX exports are archived under `legacy/cubemx/` and are no longer the active build source of truth.
 
 ## Findings
 
 ### 1. No shared protocol implementation exists across both sides
 
-The only protocol definition in the repo is a comment in the client firmware at [projects/client/Core/Src/marine_controller.cpp](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/marine_controller.cpp#L1). It describes a frame format beginning with `0xAA`, then `length`, `checksum`, `command`, and payload.
+The only protocol definition in the repo is a comment in the client firmware at `src/client/marine_controller.cpp`. It describes a frame format beginning with `0xAA`, then `length`, `checksum`, `command`, and payload.
 
 The controller firmware has no equivalent parser, no frame builder, and no command dispatcher:
 
-- [projects/controller/Core/Src/main.c](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Src/main.c#L66) only initializes hardware and then spins in an empty loop.
-- [projects/controller/Core/Src/scenes.c](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Src/scenes.c#L3) only defines a struct.
-- [projects/controller/Core/Inc/scenes.h](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Inc/scenes.h#L1) has comments only and exports no API.
+- `src/controller/main.c` only initializes hardware and then spins in an empty loop.
+- `src/controller/scenes.c` only defines a struct.
+- `include/controller/scenes.h` has comments only and exports no API.
 
 Impact: there is no actual client/controller contract implemented on both ends.
 
 ### 2. The client parser is incomplete and currently not operational
 
-The client starts UART reception in [projects/client/Core/Src/marine_controller.cpp](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/marine_controller.cpp#L59), but the receive state machine is broken:
+The client starts UART reception in `src/client/marine_controller.cpp`, but the receive state machine is broken:
 
-- `recived_counter` starts at `-1` in [projects/client/Core/Src/marine_controller.cpp](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/marine_controller.cpp#L152).
-- Start-byte detection only happens when `recived_counter < -1` in [projects/client/Core/Src/marine_controller.cpp](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/marine_controller.cpp#L188).
+- `recived_counter` starts at `-1`.
+- Start-byte detection only happens when `recived_counter < -1`.
 - Since the reset value is exactly `-1`, the start byte `0xAA` is never accepted and the parser never enters frame collection.
 
 Impact: even the client-side draft protocol receiver will not assemble frames as written.
 
 ### 3. Command semantics are documented, but not implemented
 
-The client comment block defines commands for ACK/NAK, outputs, and scenes in [projects/client/Core/Src/marine_controller.cpp](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/marine_controller.cpp#L9), but the command handler does not implement them.
+The client comment block defines commands for ACK/NAK, outputs, and scenes in `src/client/marine_controller.cpp`, but the command handler does not implement them.
 
-Instead, `handleCommands()` only compares incoming data to `"test"` and toggles a GPIO in [projects/client/Core/Src/marine_controller.cpp](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/marine_controller.cpp#L98).
+Instead, `handleCommands()` only compares incoming data to `"test"` and toggles a GPIO.
 
 Impact: the documented protocol and the executable behavior are different.
 
 ### 4. Scene models are incompatible and unshared
 
-The client hardcodes scene data as a 3D byte array in [projects/client/Core/Src/marine_controller.cpp](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/marine_controller.cpp#L39). It stores scene addresses and output IDs in a compact array with implicit meaning.
+The client hardcodes scene data as a 3D byte array in `src/client/marine_controller.cpp`. It stores scene addresses and output IDs in a compact array with implicit meaning.
 
-The controller defines a very different `struct Scenes` in [projects/controller/Core/Src/scenes.c](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Src/scenes.c#L3), using four `int[50]` arrays:
+The controller defines a very different `struct Scenes` in `src/controller/scenes.c`, using four `int[50]` arrays:
 
 - `in_address`
 - `on_on_out_addresses`
@@ -70,14 +75,14 @@ Impact: even if transport existed, the two sides do not agree on the shape of sc
 
 The client enables and handles USART2 interrupts:
 
-- NVIC setup exists in [projects/client/Core/Src/stm32f0xx_hal_msp.c](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/stm32f0xx_hal_msp.c#L110).
-- `USART2_IRQHandler()` exists in [projects/client/Core/Src/stm32f0xx_it.c](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/stm32f0xx_it.c#L147).
+- NVIC setup exists in `src/client/stm32f0xx_hal_msp.c`.
+- `USART2_IRQHandler()` exists in `src/client/stm32f0xx_it.c`.
 
 The controller does neither:
 
-- No NVIC enable in [projects/controller/Core/Src/stm32f0xx_hal_msp.c](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Src/stm32f0xx_hal_msp.c#L87).
-- No `USART2_IRQHandler()` declaration in [projects/controller/Core/Inc/stm32f0xx_it.h](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Inc/stm32f0xx_it.h#L49).
-- No `USART2_IRQHandler()` implementation in [projects/controller/Core/Src/stm32f0xx_it.c](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Src/stm32f0xx_it.c#L137).
+- No NVIC enable in `src/controller/stm32f0xx_hal_msp.c`.
+- No `USART2_IRQHandler()` declaration in `include/controller/stm32f0xx_it.h`.
+- No `USART2_IRQHandler()` implementation in `src/controller/stm32f0xx_it.c`.
 
 Impact: the controller is not set up for interrupt-driven serial reception at all.
 
@@ -85,34 +90,27 @@ Impact: the controller is not set up for interrupt-driven serial reception at al
 
 Both projects define an RS485 direction pin, but they are different board mappings:
 
-- Client: [projects/client/Core/Inc/main.h](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Inc/main.h#L61)
-- Controller: [projects/controller/Core/Inc/main.h](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Inc/main.h#L60)
+- Client: `include/client/main.h`
+- Controller: `include/controller/main.h`
 
 Both initialize the pin low at startup:
 
-- Client: [projects/client/Core/Src/main.c](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/main.c#L202)
-- Controller: [projects/controller/Core/Src/main.c](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Src/main.c#L192)
+- Client: `src/client/main.c`
+- Controller: `src/controller/main.c`
 
 But neither side toggles RS485 TX enable around transmit operations, and the controller does not transmit at all.
 
 Impact: there is no verified half-duplex bus ownership model.
 
-### 7. Build integration is inconsistent on the client
+### 7. Build integration is no longer the main blocker
 
-The client application calls `marineMain()` from [projects/client/Core/Src/main.c](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Core/Src/main.c#L98), but the active build definitions do not include `marine_controller.cpp`:
+The pre-migration repo had inconsistent Make/CMake source lists. That specific issue has been fixed by the PlatformIO migration:
 
-- Client CMake target sources end at autogenerated files in [projects/client/cmake/stm32cubemx/CMakeLists.txt](/home/minigubben/utveckling_git/marine_power_controller/projects/client/cmake/stm32cubemx/CMakeLists.txt#L23).
-- Client Makefile only lists C sources in [projects/client/Makefile](/home/minigubben/utveckling_git/marine_power_controller/projects/client/Makefile#L37).
+- the client active build includes `src/client/marine_controller.cpp`
+- the controller active build includes `src/controller/scenes.c`
+- the old CubeMX-generated Make/CMake files are now archived under `legacy/cubemx/`
 
-There is a second build file, [projects/client/STM32Make.make](/home/minigubben/utveckling_git/marine_power_controller/projects/client/STM32Make.make#L63), that references `marine_controller.cpp`, but it also references `Core/Src/main.cpp`, which does not exist in the repo.
-
-Impact: the client source tree and build metadata are out of sync. The code that defines the protocol is not reliably part of the build.
-
-### 8. Controller custom code is not part of the active build either
-
-The controller has a custom source file, [projects/controller/Core/Src/scenes.c](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Src/scenes.c#L1), but it is not included by the active CMake source list in [projects/controller/cmake/stm32cubemx/CMakeLists.txt](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/cmake/stm32cubemx/CMakeLists.txt#L23), and its API is not exported by [projects/controller/Core/Inc/scenes.h](/home/minigubben/utveckling_git/marine_power_controller/projects/controller/Core/Inc/scenes.h#L9).
-
-Impact: even the controller stub logic is not wired into the firmware application.
+Impact: the current blockers are now protocol and runtime behavior, not source-list drift.
 
 ## Gap Matrix
 
@@ -123,7 +121,7 @@ Impact: even the controller stub logic is not wired into the firmware applicatio
 | Command handling | Only test string GPIO toggle | No handlers | No shared command behavior |
 | Scene engine | Hardcoded byte-array scenes | Unused struct definition | Different data models |
 | RS485 bus control | Direction pin exists, no TX policy | Direction pin exists, no TX policy | No bus arbitration contract |
-| Build integration | Custom logic not in active builds | Stub logic not in active builds | Firmware artifacts do not match source intent |
+| Build integration | Active PlatformIO build includes custom logic | Active PlatformIO build includes stub logic | Build system no longer masks the runtime gaps |
 
 ## Recommended Order of Work
 
@@ -139,10 +137,7 @@ Impact: even the controller stub logic is not wired into the firmware applicatio
 4. Fix transport plumbing first.
    Add UART IRQ support, RX state machine, and TX direction control on both sides before scene logic.
 
-5. Repair build definitions.
-   Ensure the active Makefile and CMake build the same custom source files.
-
-6. Only then implement scene execution.
+5. Only then implement scene execution.
    Otherwise scene work will be built on an undefined transport contract.
 
 ## Immediate High-Value Fixes
@@ -150,9 +145,13 @@ Impact: even the controller stub logic is not wired into the firmware applicatio
 - Add one shared protocol header or markdown spec at repo root.
 - Make the controller implement `USART2_IRQHandler`, UART RX startup, and a minimal frame parser.
 - Fix the client RX state machine so it can actually detect the start byte.
-- Align client CMake/Makefile with the real source set.
 - Decide whether `scenes` belong centrally in the controller or distributed to clients.
 
 ## Validation Notes
 
-I could inspect the source tree and build files directly, and I dry-ran the top-level `make` targets. I could not run a real firmware build in this environment because `arm-none-eabi-gcc` is not installed in the current shell.
+I inspected the active source tree directly and verified the current build entrypoints:
+
+- `pio run -e controller`
+- `pio run -e client`
+
+I did not hardware-test upload or live debugging in this pass, so the runtime analysis above is based on source inspection plus successful local builds rather than on-target execution.

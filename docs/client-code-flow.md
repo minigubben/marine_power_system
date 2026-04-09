@@ -1,37 +1,50 @@
 # Client Firmware Code Flow
 
-This document describes the current runtime behavior of the client firmware in `projects/client`.
+This document describes the current runtime behavior of the client firmware in `src/client`.
 
 ## Scope
 
-The client project combines STM32CubeMX-generated startup code with one application module:
+The active client firmware is built by PlatformIO from:
 
-- `Core/Src/main.c`
-- `Core/Src/marine_controller.cpp`
-- `Core/Inc/marine_controller.h`
+- `src/client/main.c`
+- `src/client/marine_controller.cpp`
+- `src/client/stm32f0xx_hal_msp.c`
+- `src/client/stm32f0xx_it.c`
+- `include/client/main.h`
+- `include/client/marine_controller.h`
+- `include/client/stm32f0xx_it.h`
+
+Shared STM32 configuration comes from:
+
+- `config/stm32/stm32f0xx_hal_conf.h`
+- `ldscripts/STM32F070C6Tx_FLASH.ld`
+- PlatformIO-managed STM32Cube/CMSIS packages
+
+The archived STM32CubeMX export remains under `legacy/cubemx/client`, but it is no longer part of the active build.
 
 The implemented behavior is centered around UART receive interrupts on `USART2` plus a simple message parser in `marine_controller.cpp`.
 
 ## Module Map
 
-- `Core/Src/main.c`: boot sequence, GPIO/UART init, handoff into `marineMain()`
-- `Core/Inc/main.h`: output and RS485 pin definitions
-- `Core/Src/marine_controller.cpp`: protocol comments, startup loop, UART receive callback, CRC check, command dispatch, placeholder scene handling
-- `Core/Inc/marine_controller.h`: public entrypoint for `marineMain()`
-- `Core/Src/stm32f0xx_it.c`: `USART2_IRQHandler()` forwarding into HAL
+- `src/client/main.c`: boot sequence, GPIO/UART init, handoff into `marineMain()`
+- `include/client/main.h`: output and RS485 pin definitions
+- `src/client/marine_controller.cpp`: protocol comments, startup loop, UART receive callback, CRC check, command dispatch, placeholder scene handling
+- `include/client/marine_controller.h`: public entrypoint for `marineMain()`
+- `src/client/stm32f0xx_it.c`: `USART2_IRQHandler()` forwarding into HAL
+- `src/client/stm32f0xx_hal_msp.c`: GPIO, UART pin mux, and NVIC setup
 
 ## High-Level Runtime Flow
 
 ```mermaid
 flowchart TD
-    A[Reset / startup_stm32f070x6.s] --> B[main]
+    A[Reset / PlatformIO CMSIS startup] --> B[main]
     B --> C[HAL_Init]
     C --> D[SystemClock_Config]
     D --> E[MX_GPIO_Init]
     E --> F[MX_USART2_UART_Init]
     F --> G[marineMain]
     G --> H[Arm UART receive interrupt]
-    H --> I[Periodic LED/output toggle loop]
+    H --> I[Periodic output toggle loop]
     J[USART2 IRQ] --> K[HAL_UART_IRQHandler]
     K --> L[HAL_UART_RxCpltCallback]
     L --> M[Byte framing state machine]
@@ -44,13 +57,13 @@ flowchart TD
 
 ### 1. Reset and HAL startup
 
-The generated startup code enters `main()`, then `HAL_Init()` sets up the HAL runtime and tick source.
+The PlatformIO STM32Cube startup code enters `main()`, then `HAL_Init()` sets up the HAL runtime and tick source.
 
 ### 2. Clock and peripheral configuration
 
 `SystemClock_Config()` selects HSI with no PLL. The code then initializes:
 
-- GPIOC/GPIOA/GPIOB clocks
+- GPIOC, GPIOA, and GPIOB clocks
 - three output pins
 - one RS485 transmit-enable pin
 - `USART2` at `115200`, `9` data bits, even parity, `1` stop bit
@@ -98,7 +111,7 @@ This function:
 
 The callback uses these globals:
 
-- `rx_buffer[1]`: single-byte DMA/interrupt target
+- `rx_buffer[1]`: single-byte interrupt target
 - `recived_counter`: parser position
 - `recive_length`: expected payload length
 - `recived_string[10]`: assembled frame buffer
@@ -109,13 +122,15 @@ The intended framing protocol is documented in comments as:
 0xAA | length | checksum | command | payload...
 ```
 
-The implementation behavior is:
+The implementation behavior is intended to:
 
 - wait for start byte `0xAA`
 - treat the next byte as payload length
 - keep copying bytes until `length + 2` bytes after the start marker have been collected
 - pass the assembled payload into `serialProtocolReciver()`
 - reset parser state and continue listening
+
+The current code does not fully achieve that design because the reset/start-byte logic is still inconsistent.
 
 ## Message Validation and Dispatch
 
@@ -163,6 +178,6 @@ The RS485 direction pin is initialized but not actively managed in the applicati
 ## Known Constraints In The Current Flow
 
 - `marineMain()` contains its own infinite loop, so the `while (1)` in `main()` is never reached.
-- The receive state machine uses a `10`-byte buffer and does not enforce protocol size safety beyond a simple reset when the counter grows too large.
-- The start-byte wait branch currently checks `recived_counter < -1`, but the reset value is `-1`, so the parser never actually enters the explicit start-byte wait branch after reset. The flow above describes the intended design, but this condition is worth revisiting in code.
+- The receive state machine uses a 10-byte buffer and does not enforce protocol size safety beyond a simple reset when the counter grows too large.
+- The start-byte wait branch currently checks `recived_counter < -1`, but the reset value is `-1`, so the parser never actually enters the explicit start-byte wait branch after reset.
 - The protocol comments describe output and scene commands that are not implemented yet.
