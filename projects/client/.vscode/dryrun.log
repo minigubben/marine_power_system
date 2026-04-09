@@ -1,5 +1,0 @@
-make.exe --dry-run --keep-going --print-directory
-make.exe: Entering directory `c:/Users/minigubben/Documents/Utveckling_git/STM32/bat_8_ut_reciver'
-make.exe: Nothing to be done for `all'.
-make.exe: Leaving directory `c:/Users/minigubben/Documents/Utveckling_git/STM32/bat_8_ut_reciver'
- 

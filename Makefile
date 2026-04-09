@@ -1,20 +1,19 @@
 .PHONY: all controller client clean clean-controller clean-client
 
-CONTROLLER_DIR := projects/controller
-CLIENT_DIR := projects/client
+PIO ?= pio
 
 all: controller client
 
 controller:
-	$(MAKE) -C $(CONTROLLER_DIR)
+	$(PIO) run -e controller
 
 client:
-	$(MAKE) -C $(CLIENT_DIR)
+	$(PIO) run -e client
 
 clean: clean-controller clean-client
 
 clean-controller:
-	$(MAKE) -C $(CONTROLLER_DIR) clean
+	$(PIO) run -t clean -e controller
 
 clean-client:
-	$(MAKE) -C $(CLIENT_DIR) clean
+	$(PIO) run -t clean -e client

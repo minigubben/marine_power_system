@@ -152,7 +152,7 @@ void handleData(uint8_t data[], int length)
 int recived_counter = -1;
 uint8_t recived_string[10];
 uint8_t recive_length = 0;
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   // check if interrupt is from uart2
   if (huart->Instance == USART2)

@@ -1,41 +1,67 @@
 # Marine Power Controller Monorepo
 
-This repository combines the two STM32 firmware projects that make up the marine power control system.
+This repository contains the two STM32 firmware targets that make up the marine power control system.
 
 ## Layout
 
-- `projects/controller`: controller firmware, imported from `marine_power_controller_master_firmware`
-- `projects/client`: client firmware, imported from `marine_power_controller_8out_firmware`
+- `platformio.ini`: repo-level PlatformIO configuration
+- `boards/marine_stm32f070c6tx.json`: custom PlatformIO board definition for the STM32F070C6T6 target
+- `src/controller`, `include/controller`: active controller firmware sources and headers
+- `src/client`, `include/client`: active client firmware sources and headers
+- `config/stm32/stm32f0xx_hal_conf.h`: shared HAL configuration header
+- `ldscripts/STM32F070C6Tx_FLASH.ld`: shared linker script
+- `legacy/cubemx/controller`: archived STM32CubeMX export from `marine_power_controller_master_firmware`
+- `legacy/cubemx/client`: archived STM32CubeMX export from `marine_power_controller_8out_firmware`
 - `docs/controller-code-flow.md`: controller runtime walkthrough
 - `docs/client-code-flow.md`: client runtime walkthrough
 
-Each project keeps its existing `Makefile`, `CMakeLists.txt`, STM32CubeMX files, and local `.vscode` settings.
-
 ## Build
 
-Build both projects from the repository root:
+Install PlatformIO Core if it is not already available:
+
+```sh
+python3 -m pip install --user platformio
+```
+
+Build both firmware targets:
+
+```sh
+pio run
+```
+
+Build one target:
+
+```sh
+pio run -e controller
+pio run -e client
+```
+
+The root `Makefile` provides the same build entrypoints:
 
 ```sh
 make
-```
-
-Build one project:
-
-```sh
 make controller
 make client
-```
-
-Clean build artifacts:
-
-```sh
 make clean
 ```
 
-You can also continue working inside each project directory directly:
+## Flash And Debug
 
-- `projects/controller`
-- `projects/client`
+Upload with ST-Link:
+
+```sh
+pio run -e controller -t upload
+pio run -e client -t upload
+```
+
+Start a debug session:
+
+```sh
+pio debug -e controller
+pio debug -e client
+```
+
+PlatformIO uses the repo-local custom board definition in `boards/marine_stm32f070c6tx.json` and the shared linker script in `ldscripts/STM32F070C6Tx_FLASH.ld`.
 
 ## Documentation
 
@@ -46,7 +72,7 @@ Code flow documents:
 
 ## History
 
-The commit history from the original repositories was imported into this monorepo under subdirectories, so the old project history is preserved.
+The commit history from the original repositories was imported into this monorepo under subdirectories, so the old project history is preserved. The original STM32CubeMX exports remain archived under `legacy/cubemx/`.
 
 Original repository mappings:
 
