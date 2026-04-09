@@ -7,11 +7,19 @@ This document describes the current runtime behavior of the controller firmware 
 The active controller firmware is built by PlatformIO from:
 
 - `src/controller/main.c`
-- `src/controller/scenes.c`
+- `src/controller/controller_app.c`
+- `src/controller/controller_bus.c`
+- `src/controller/controller_inputs.c`
+- `src/controller/scene_engine.c`
+- `src/controller/scene_table.c`
 - `src/controller/stm32f0xx_hal_msp.c`
 - `src/controller/stm32f0xx_it.c`
+- `include/controller/controller_app.h`
+- `include/controller/controller_bus.h`
+- `include/controller/controller_inputs.h`
 - `include/controller/main.h`
-- `include/controller/scenes.h`
+- `include/controller/scene_engine.h`
+- `include/controller/scene_table.h`
 - `include/controller/stm32f0xx_it.h`
 
 Shared STM32 configuration comes from:
@@ -22,14 +30,17 @@ Shared STM32 configuration comes from:
 
 The archived STM32CubeMX export remains under `legacy/cubemx/controller`, but it is no longer part of the active build.
 
-The controller still contains only a minimal application skeleton. There is no active scene engine wired into the boot path, no UART receive path, and no logic in the main loop beyond idle spinning.
+The controller now owns local input polling, scene state, and RS485 transmit-side orchestration. It still has no receive-side UART parser.
 
 ## Module Map
 
-- `src/controller/main.c`: boot sequence, peripheral initialization, empty forever loop
+- `src/controller/main.c`: boot sequence and handoff into `controller_app`
+- `src/controller/controller_app.c`: top-level application composition
+- `src/controller/controller_bus.c`: RS485 frame transmission
+- `src/controller/controller_inputs.c`: local button GPIO init and debounce
+- `src/controller/scene_engine.c`: trigger-to-scene execution
+- `src/controller/scene_table.c`: static scene and binding definitions
 - `include/controller/main.h`: board pin definitions, including `RS485_TX_EN_Pin`
-- `src/controller/scenes.c`: placeholder `Scenes` data structure
-- `include/controller/scenes.h`: design notes for future scene handling
 - `src/controller/stm32f0xx_it.c`: default interrupt handlers
 - `src/controller/stm32f0xx_hal_msp.c`: peripheral MSP setup for GPIO/UART
 
@@ -41,8 +52,9 @@ flowchart TD
     B --> C[SystemClock_Config]
     C --> D[MX_GPIO_Init]
     D --> E[MX_USART2_UART_Init]
-    E --> F[while 1]
-    F --> G[Idle loop with no application work]
+    E --> F[controller_app_init]
+    F --> G[while 1]
+    G --> H[controller_app_process]
 ```
 
 ## Detailed Flow
@@ -57,11 +69,11 @@ After reset, the PlatformIO STM32Cube startup code transfers control into `main(
 
 ### 3. GPIO initialization
 
-`MX_GPIO_Init()` currently enables GPIOA and configures one output:
+`MX_GPIO_Init()` enables GPIOA and configures the controller RS485 direction pin:
 
 - `RS485_TX_EN_Pin` on GPIOA pin 7
 
-The pin is driven low during initialization, which implies the RS485 transmitter is disabled by default.
+The pin is driven low during initialization, so the RS485 transmitter is disabled by default.
 
 ### 4. UART initialization
 
@@ -72,22 +84,33 @@ The pin is driven low during initialization, which implies the RS485 transmitter
 - even parity
 - `1` stop bit
 
-That framing matches the client firmware configuration, but the controller does not currently transmit or receive anything after init.
+The controller currently uses this UART for transmit-side protocol traffic only.
 
-### 5. Main loop
+### 5. Application startup
 
-The forever loop in `main()` is empty. Once initialization completes, the controller spends all runtime in an idle busy-loop with no state updates, no scene evaluation, and no protocol handling.
+`controller_app_init()` wires together three controller-specific modules:
 
-## Scene Model Placeholder
+- `controller_bus`: stores the UART handle used for RS485 transmission
+- `controller_inputs`: initializes the local controller button GPIO
+- `scene_engine`: resets scene state through `scene_table`
 
-`scenes.c` defines a `struct Scenes` with four address arrays:
+### 6. Main loop
 
-- `in_address`: addresses that trigger a scene
-- `on_on_out_addresses`: outputs to turn on when the scene activates
-- `on_off_out_addresses`: outputs to turn off when the scene activates
-- `off_out_addresses`: outputs to turn off when the scene deactivates
+`controller_app_process()` polls the local controller button. When a debounced press is detected, it:
 
-This type is compiled into the firmware now, but it is still not exposed as a usable API, instantiated anywhere, or connected to the controller boot path. It remains a design stub rather than active firmware behavior.
+1. resolves the `(source_node_id, button_id)` pair through `scene_table`
+2. toggles the matching scene state
+3. sends one `PROTOCOL_CMD_SET_OUTPUT_STATE` frame per mapped output through `controller_bus`
+
+## Scene Model
+
+The controller scene data now lives in `scene_table.c`:
+
+- `ButtonBinding`: maps a source node/button pair to a scene ID
+- `SceneOutput`: maps a scene to one target node/output pair
+- `SceneDefinition`: tracks current scene state plus its output list
+
+`scene_engine.c` owns the logic that turns a trigger into scene state changes and outbound output commands.
 
 ## Interrupt Flow
 
@@ -97,11 +120,10 @@ The controller interrupt file contains the default Cortex-M handlers and no conf
 - fault handlers trap in infinite loops
 - no application-level serial receive flow is currently implemented
 
-## What Is Missing
+## Remaining Gaps
 
-The controller-side application architecture appears intended to manage scenes and drive RS485 communication, but those pieces are not yet present in the active code path. To turn this into a functioning controller, the next implementation layer would need:
+The controller still needs:
 
-- a protocol parser or transmitter on `USART2`
-- scene state storage and evaluation logic
-- a scheduler or main-loop task model
-- a link between received commands and scene/output actions
+- a receive-side UART parser if nodes must report back beyond button-press messages
+- acknowledgement or retry behavior on the bus
+- dynamic scene configuration or persistence if scenes should not stay hard-coded

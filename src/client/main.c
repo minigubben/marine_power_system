@@ -23,7 +23,7 @@
 /* USER CODE BEGIN Includes */
 
 // #include <string.h>
-#include "marine_controller.h"
+#include "node_app.h"
 #include "stm32f0xx_hal.h"
 
 
@@ -94,8 +94,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  //Ringbuf_init(huart2);
-  marineMain();
+  node_app_init(&huart2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -105,6 +104,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    node_app_process();
   }
   /* USER CODE END 3 */
 }

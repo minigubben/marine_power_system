@@ -1,17 +1,24 @@
 # Client Firmware Code Flow
 
-This document describes the current runtime behavior of the client firmware in `src/client`.
+This document describes the current runtime behavior of the node firmware in `src/client`.
 
 ## Scope
 
-The active client firmware is built by PlatformIO from:
+The active node firmware is built by PlatformIO from:
 
 - `src/client/main.c`
-- `src/client/marine_controller.cpp`
+- `src/client/node_app.cpp`
+- `src/client/node_bus.cpp`
+- `src/client/node_inputs.cpp`
+- `src/client/node_outputs.cpp`
 - `src/client/stm32f0xx_hal_msp.c`
 - `src/client/stm32f0xx_it.c`
 - `include/client/main.h`
-- `include/client/marine_controller.h`
+- `include/client/node_app.h`
+- `include/client/node_bus.h`
+- `include/client/node_config.h`
+- `include/client/node_inputs.h`
+- `include/client/node_outputs.h`
 - `include/client/stm32f0xx_it.h`
 
 Shared STM32 configuration comes from:
@@ -22,14 +29,16 @@ Shared STM32 configuration comes from:
 
 The archived STM32CubeMX export remains under `legacy/cubemx/client`, but it is no longer part of the active build.
 
-The implemented behavior is centered around UART receive interrupts on `USART2` plus a simple message parser in `marine_controller.cpp`.
+The implemented behavior is centered around UART receive interrupts on `USART2`, the shared protocol parser in `include/shared/protocol.h`, and separate bus/input/output modules.
 
 ## Module Map
 
-- `src/client/main.c`: boot sequence, GPIO/UART init, handoff into `marineMain()`
+- `src/client/main.c`: boot sequence and handoff into `node_app`
 - `include/client/main.h`: output and RS485 pin definitions
-- `src/client/marine_controller.cpp`: protocol comments, startup loop, UART receive callback, CRC check, command dispatch, placeholder scene handling
-- `include/client/marine_controller.h`: public entrypoint for `marineMain()`
+- `src/client/node_app.cpp`: application orchestration
+- `src/client/node_bus.cpp`: UART receive callback and RS485 transmit path
+- `src/client/node_inputs.cpp`: local button GPIO init and debounce
+- `src/client/node_outputs.cpp`: output ID to GPIO mapping
 - `src/client/stm32f0xx_it.c`: `USART2_IRQHandler()` forwarding into HAL
 - `src/client/stm32f0xx_hal_msp.c`: GPIO, UART pin mux, and NVIC setup
 
@@ -42,15 +51,17 @@ flowchart TD
     C --> D[SystemClock_Config]
     D --> E[MX_GPIO_Init]
     E --> F[MX_USART2_UART_Init]
-    F --> G[marineMain]
-    G --> H[Arm UART receive interrupt]
-    H --> I[Periodic output toggle loop]
+    F --> G[node_app_init]
+    G --> H[while 1]
+    H --> I[node_app_process]
     J[USART2 IRQ] --> K[HAL_UART_IRQHandler]
     K --> L[HAL_UART_RxCpltCallback]
-    L --> M[Byte framing state machine]
-    M --> N[serialProtocolReciver]
-    N --> O[CRC8 validation]
-    O --> P[handleCommands]
+    L --> M[protocol_parser_push_byte]
+    M --> N[Pending frame buffer]
+    I --> O[Frame dispatch]
+    O --> P[Output update]
+    I --> Q[Input poll]
+    Q --> R[Button pressed frame]
 ```
 
 ## Startup Flow
@@ -70,22 +81,22 @@ The PlatformIO STM32Cube startup code enters `main()`, then `HAL_Init()` sets up
 
 ### 3. Handoff into application code
 
-After peripheral init, `main()` calls `marineMain()`. This is the real application entrypoint for the client firmware.
+After peripheral init, `main()` calls `node_app_init(&huart2)`, then stays in a forever loop that repeatedly calls `node_app_process()`.
 
-## `marineMain()` Flow
+## `node_app` Flow
 
-`marineMain()` does not return. It owns the runtime after startup.
+`node_app_init()`:
 
-Current behavior:
+1. initializes the node output module
+2. initializes the optional local input module
+3. initializes the node bus module and arms one-byte interrupt-driven UART reception
 
-1. Set GPIOB pin 9 high.
-2. Arm a one-byte interrupt-driven receive with `HAL_UART_Receive_IT(&huart2, rx_buffer, 1)`.
-3. Delay 2 seconds.
-4. Set GPIOB pin 9 low.
-5. Delay 2 seconds.
-6. Repeat forever.
+`node_app_process()`:
 
-This loop acts like a heartbeat and also ensures receive is armed at least once during startup. After that, the receive callback rearms the UART on every byte.
+1. applies one pending received frame, if available
+2. polls for a debounced local button press, if inputs are enabled
+3. sends a `PROTOCOL_CMD_BUTTON_PRESSED` frame when a local press is detected
+4. delays for 10 ms before the next polling iteration
 
 ## UART Receive Flow
 
@@ -97,87 +108,51 @@ The receive path spans three layers.
 
 ### Layer 2: HAL completion callback
 
-When one byte has been received, HAL calls `HAL_UART_RxCpltCallback()` in `marine_controller.cpp`.
+When one byte has been received, HAL calls `HAL_UART_RxCpltCallback()` in `node_bus.cpp`.
 
 This function:
 
-- verifies the callback came from `USART2`
-- appends the received byte into a small framing buffer
-- tracks expected payload length after the start byte
-- calls `serialProtocolReciver()` once a full message is assembled
+- verifies the callback came from the initialized UART handle
+- feeds the byte into the shared parser from `include/shared/protocol.h`
+- stores the completed frame into a pending-frame slot
 - rearms `HAL_UART_Receive_IT()` for the next byte
 
 ### Layer 3: Framing state machine
 
-The callback uses these globals:
-
-- `rx_buffer[1]`: single-byte interrupt target
-- `recived_counter`: parser position
-- `recive_length`: expected payload length
-- `recived_string[10]`: assembled frame buffer
-
-The intended framing protocol is documented in comments as:
+The framing protocol is shared between controller and node firmware:
 
 ```text
 0xAA | length | checksum | command | payload...
 ```
 
-The implementation behavior is intended to:
+`protocol_parser_push_byte()` owns the receive state machine and CRC validation.
 
-- wait for start byte `0xAA`
-- treat the next byte as payload length
-- keep copying bytes until `length + 2` bytes after the start marker have been collected
-- pass the assembled payload into `serialProtocolReciver()`
-- reset parser state and continue listening
+## Message Dispatch
 
-The current code does not fully achieve that design because the reset/start-byte logic is still inconsistent.
+Once a frame is complete, `node_app_process()` dispatches it.
 
-## Message Validation and Dispatch
+Current command behavior:
 
-Once a frame is complete, `serialProtocolReciver()` performs three steps:
+- `PROTOCOL_CMD_SET_OUTPUT_STATE` with a 3-byte payload is accepted
+- payload byte 0 must match `NODE_ID`
+- payload byte 1 selects the output ID
+- payload byte 2 selects the output state
 
-1. Read `length` from byte 0 of the post-start buffer.
-2. Read `checksum` from byte 1.
-3. Copy the remaining bytes into a temporary `data[]` array and validate them with `CRC8()`.
-
-If the CRC matches, the code calls `handleCommands(data, length)`.
-
-### Current command behavior
-
-`handleCommands()` only recognizes one test payload today:
-
-- if the received data matches the string `"test"`, it toggles GPIOC pin 13
-
-There is no command table yet for outputs, scenes, acknowledgements, or error responses even though the protocol comment sketches those concepts.
-
-## Scene Handling Placeholder
-
-The file also contains:
-
-- a hard-coded `scenes` array
-- `handleData()`, which iterates over scene address/output mappings
-
-This path is not currently connected to the UART parser. It looks like a partially implemented next step toward turning protocol messages into output actions.
+The actual GPIO write is isolated in `node_outputs.cpp`.
 
 ## Pin-Level Behavior
 
-From `main.h`, the client exposes:
+From `main.h`, the node exposes:
 
 - `Output_1_Pin`: GPIOC pin 13
 - `Output_2_Pin`: GPIOB pin 9
 - `Output_3_Pin`: GPIOB pin 8
 - `RS485_TX_EN_Pin`: GPIOB pin 10
 
-Current application code actively touches:
-
-- GPIOB pin 9 in the `marineMain()` heartbeat loop
-- GPIOC pin 13 in `handleCommands()` when the payload is `"test"`
-
-The RS485 direction pin is initialized but not actively managed in the application logic shown here.
+Application code touches those outputs through `node_outputs.cpp`, and manages RS485 transmit direction in `node_bus.cpp`.
 
 ## Known Constraints In The Current Flow
 
-- `marineMain()` contains its own infinite loop, so the `while (1)` in `main()` is never reached.
-- The receive state machine uses a 10-byte buffer and does not enforce protocol size safety beyond a simple reset when the counter grows too large.
-- The start-byte wait branch currently checks `recived_counter < -1`, but the reset value is `-1`, so the parser never actually enters the explicit start-byte wait branch after reset.
-- The protocol comments describe output and scene commands that are not implemented yet.
+- only one pending frame is buffered at a time
+- the node currently implements output control and button-pressed reporting only
+- there is still no acknowledgement or retry model on the bus

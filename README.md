@@ -7,13 +7,14 @@ This repository contains the two STM32 firmware targets that make up the marine 
 - `platformio.ini`: repo-level PlatformIO configuration
 - `boards/marine_stm32f070c6tx.json`: custom PlatformIO board definition for the STM32F070C6T6 target
 - `src/controller`, `include/controller`: active controller firmware sources and headers
-- `src/client`, `include/client`: active client firmware sources and headers
+- `src/client`, `include/client`: active node firmware sources and headers
+- `include/shared`: protocol types and framing shared by both targets
 - `config/stm32/stm32f0xx_hal_conf.h`: shared HAL configuration header
 - `ldscripts/STM32F070C6Tx_FLASH.ld`: shared linker script
 - `legacy/cubemx/controller`: archived STM32CubeMX export from `marine_power_controller_master_firmware`
 - `legacy/cubemx/client`: archived STM32CubeMX export from `marine_power_controller_8out_firmware`
 - `docs/controller-code-flow.md`: controller runtime walkthrough
-- `docs/client-code-flow.md`: client runtime walkthrough
+- `docs/client-code-flow.md`: node runtime walkthrough
 
 ## Build
 

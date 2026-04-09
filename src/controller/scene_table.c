@@ -1,8 +1,6 @@
-#include "scenes.h"
+#include "scene_table.h"
 
 #include "input_config.h"
-
-#include <stdbool.h>
 
 typedef struct
 {
@@ -22,32 +20,32 @@ static const SceneOutput scene_1_outputs[] = {
     {11U, 1U},
 };
 
-static SceneDefinition scenes[] = {
+static SceneDefinition scene_definitions[] = {
     {1U, false, scene_1_outputs, sizeof(scene_1_outputs) / sizeof(scene_1_outputs[0])},
 };
 
-static SceneDefinition *scenes_find_definition(uint8_t scene_id)
+static SceneDefinition *scene_table_find_definition(uint8_t scene_id)
 {
-    for (size_t i = 0U; i < (sizeof(scenes) / sizeof(scenes[0])); ++i)
+    for (size_t i = 0U; i < (sizeof(scene_definitions) / sizeof(scene_definitions[0])); ++i)
     {
-        if (scenes[i].scene_id == scene_id)
+        if (scene_definitions[i].scene_id == scene_id)
         {
-            return &scenes[i];
+            return &scene_definitions[i];
         }
     }
 
     return NULL;
 }
 
-void scenes_init(void)
+void scene_table_init(void)
 {
-    for (size_t i = 0U; i < (sizeof(scenes) / sizeof(scenes[0])); ++i)
+    for (size_t i = 0U; i < (sizeof(scene_definitions) / sizeof(scene_definitions[0])); ++i)
     {
-        scenes[i].is_active = false;
+        scene_definitions[i].is_active = false;
     }
 }
 
-bool scenes_find_binding(uint8_t source_node_id, uint8_t button_id, uint8_t *scene_id_out)
+bool scene_table_find_binding(node_id_t source_node_id, button_id_t button_id, uint8_t *scene_id_out)
 {
     for (size_t i = 0U; i < (sizeof(button_bindings) / sizeof(button_bindings[0])); ++i)
     {
@@ -66,9 +64,9 @@ bool scenes_find_binding(uint8_t source_node_id, uint8_t button_id, uint8_t *sce
     return false;
 }
 
-bool scenes_toggle(uint8_t scene_id)
+bool scene_table_toggle(uint8_t scene_id)
 {
-    SceneDefinition *scene = scenes_find_definition(scene_id);
+    SceneDefinition *scene = scene_table_find_definition(scene_id);
 
     if (scene == NULL)
     {
@@ -79,9 +77,9 @@ bool scenes_toggle(uint8_t scene_id)
     return true;
 }
 
-bool scenes_get_state(uint8_t scene_id)
+bool scene_table_get_state(uint8_t scene_id)
 {
-    SceneDefinition *scene = scenes_find_definition(scene_id);
+    SceneDefinition *scene = scene_table_find_definition(scene_id);
 
     if (scene == NULL)
     {
@@ -91,9 +89,9 @@ bool scenes_get_state(uint8_t scene_id)
     return scene->is_active;
 }
 
-const SceneOutput *scenes_get_outputs(uint8_t scene_id, size_t *count_out)
+const SceneOutput *scene_table_get_outputs(uint8_t scene_id, size_t *count_out)
 {
-    SceneDefinition *scene = scenes_find_definition(scene_id);
+    SceneDefinition *scene = scene_table_find_definition(scene_id);
 
     if (count_out != NULL)
     {

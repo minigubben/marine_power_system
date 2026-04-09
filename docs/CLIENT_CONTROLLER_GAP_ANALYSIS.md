@@ -2,6 +2,8 @@
 
 Date: 2026-04-09
 
+> Historical note: this document describes the pre-modular refactor state that existed before the current `node_*`, `controller_*`, and `scene_*` module split. Treat it as a dated review snapshot, not the current source-of-truth architecture.
+
 ## Scope
 
 This review compares the two active firmware targets in this repository:
