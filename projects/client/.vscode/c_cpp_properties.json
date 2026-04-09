@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "name": "STM32",
+      "includePath": [
+        "C:/Users/minigubben/STM32Cube/Repository/STM32Cube_FW_F0_V1.11.3/Drivers/CMSIS/Device/ST/STM32F0xx/Include",
+        "C:/Users/minigubben/STM32Cube/Repository/STM32Cube_FW_F0_V1.11.3/Drivers/CMSIS/Include",
+        "C:/Users/minigubben/STM32Cube/Repository/STM32Cube_FW_F0_V1.11.3/Drivers/STM32F0xx_HAL_Driver/Inc",
+        "C:/Users/minigubben/STM32Cube/Repository/STM32Cube_FW_F0_V1.11.3/Drivers/STM32F0xx_HAL_Driver/Inc/Legacy",
+        "Core/Inc",
+        "Drivers/CMSIS/Device/ST/STM32F0xx/Include",
+        "Drivers/CMSIS/Include",
+        "Drivers/STM32F0xx_HAL_Driver/Inc",
+        "Drivers/STM32F0xx_HAL_Driver/Inc/Legacy"
+      ],
+      "defines": [
+        "STM32F070x6",
+        "USE_HAL_DRIVER"
+      ],
+      "compilerPath": "C:\\PROGRAM FILES (X86)\\GNU ARM EMBEDDED TOOLCHAIN\\10 2020-Q4-MAJOR\\BIN\\ARM-NONE-EABI-G++.EXE"
+    }
+  ],
+  "version": 4
+}
