@@ -34,7 +34,7 @@ The implemented behavior is centered around UART receive interrupts on `USART2`,
 ## Module Map
 
 - `src/client/main.c`: boot sequence and handoff into `node_app`
-- `include/client/main.h`: output and RS485 pin definitions
+- `include/client/main.h`: input, output, and RS485 pin definitions
 - `src/client/node_app.cpp`: application orchestration
 - `src/client/node_bus.cpp`: UART receive callback and RS485 transmit path
 - `src/client/node_inputs.cpp`: local button GPIO init and debounce
@@ -74,8 +74,8 @@ The PlatformIO STM32Cube startup code enters `main()`, then `HAL_Init()` sets up
 
 `SystemClock_Config()` selects HSI with no PLL. The code then initializes:
 
-- GPIOC, GPIOA, and GPIOB clocks
-- three output pins
+- GPIOA and GPIOB clocks
+- six LED/status output pins
 - one RS485 transmit-enable pin
 - `USART2` at `115200`, `9` data bits, even parity, `1` stop bit
 
@@ -94,7 +94,7 @@ After peripheral init, `main()` calls `node_app_init(&huart2)`, then stays in a 
 `node_app_process()`:
 
 1. applies one pending received frame, if available
-2. polls for a debounced local button press, if inputs are enabled
+2. polls for a debounced local button press across six local inputs, if inputs are enabled
 3. sends a `PROTOCOL_CMD_BUTTON_PRESSED` frame when a local press is detected
 4. delays for 10 ms before the next polling iteration
 
@@ -144,12 +144,12 @@ The actual GPIO write is isolated in `node_outputs.cpp`.
 
 From `main.h`, the node exposes:
 
-- `Output_1_Pin`: GPIOC pin 13
-- `Output_2_Pin`: GPIOB pin 9
-- `Output_3_Pin`: GPIOB pin 8
-- `RS485_TX_EN_Pin`: GPIOB pin 10
+- `USART2_TX` on `PA2` and `USART2_RX` on `PA3`
+- `RS485_TX_EN_Pin` on `PA7`
+- outputs `OUT1..OUT6` on `PA12`, `PA8`, `PB14`, `PB12`, `PB10`, `PB1`
+- inputs `IN1..IN6` on `PA11`, `PB15`, `PB13`, `PB11`, `PB2`, `PB0`
 
-Application code touches those outputs through `node_outputs.cpp`, and manages RS485 transmit direction in `node_bus.cpp`.
+Application code touches the LED/status outputs through `node_outputs.cpp`, debounces the six local inputs in `node_inputs.cpp`, and manages RS485 transmit direction in `node_bus.cpp`.
 
 ## Known Constraints In The Current Flow
 

@@ -58,14 +58,32 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define Output_1_Pin GPIO_PIN_13
-#define Output_1_GPIO_Port GPIOC
-#define RS485_TX_EN_Pin GPIO_PIN_10
-#define RS485_TX_EN_GPIO_Port GPIOB
-#define Output_3_Pin GPIO_PIN_8
+#define RS485_TX_EN_Pin GPIO_PIN_7
+#define RS485_TX_EN_GPIO_Port GPIOA
+#define Output_2_Pin GPIO_PIN_8
+#define Output_2_GPIO_Port GPIOA
+#define Input_1_Pin GPIO_PIN_11
+#define Input_1_GPIO_Port GPIOA
+#define Output_1_Pin GPIO_PIN_12
+#define Output_1_GPIO_Port GPIOA
+#define Output_6_Pin GPIO_PIN_1
+#define Output_6_GPIO_Port GPIOB
+#define Input_5_Pin GPIO_PIN_2
+#define Input_5_GPIO_Port GPIOB
+#define Input_6_Pin GPIO_PIN_0
+#define Input_6_GPIO_Port GPIOB
+#define Output_5_Pin GPIO_PIN_10
+#define Output_5_GPIO_Port GPIOB
+#define Input_4_Pin GPIO_PIN_11
+#define Input_4_GPIO_Port GPIOB
+#define Output_4_Pin GPIO_PIN_12
+#define Output_4_GPIO_Port GPIOB
+#define Input_3_Pin GPIO_PIN_13
+#define Input_3_GPIO_Port GPIOB
+#define Output_3_Pin GPIO_PIN_14
 #define Output_3_GPIO_Port GPIOB
-#define Output_2_Pin GPIO_PIN_9
-#define Output_2_GPIO_Port GPIOB
+#define Input_2_Pin GPIO_PIN_15
+#define Input_2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
