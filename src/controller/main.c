@@ -22,6 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "controller_app.h"
 
 /* USER CODE END Includes */
 
@@ -90,6 +91,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  controller_app_init(&huart2);
 
   /* USER CODE END 2 */
 
@@ -100,6 +102,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    controller_app_process();
   }
   /* USER CODE END 3 */
 }
