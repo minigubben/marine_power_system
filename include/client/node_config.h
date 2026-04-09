@@ -1,41 +1,78 @@
-#ifndef CLIENT_NODE_CONFIG_H
-#define CLIENT_NODE_CONFIG_H
+#ifndef NODE_CONFIG_H
+#define NODE_CONFIG_H
 
-#include "stm32f0xx_hal.h"
+#include "main.h"
 
-#define CLIENT_ROLE_INPUT 1U
-#define CLIENT_ROLE_OUTPUT 2U
-
-#ifndef CLIENT_NODE_ID
-#define CLIENT_NODE_ID 1U
+#ifndef NODE_ID
+#define NODE_ID 10U
 #endif
 
-#ifndef CLIENT_ROLE
-#define CLIENT_ROLE CLIENT_ROLE_INPUT
+#ifndef NODE_HAS_INPUTS
+#define NODE_HAS_INPUTS 0U
 #endif
 
-#ifndef BUTTON_1_ID
-#define BUTTON_1_ID 1U
+#ifndef NODE_HAS_OUTPUTS
+#define NODE_HAS_OUTPUTS 1U
 #endif
 
-#ifndef BUTTON_1_GPIO_Port
-#define BUTTON_1_GPIO_Port GPIOA
+#ifndef NODE_BUTTON_1_ID
+#define NODE_BUTTON_1_ID 1U
 #endif
 
-#ifndef BUTTON_1_Pin
-#define BUTTON_1_Pin GPIO_PIN_0
+#ifndef NODE_BUTTON_1_GPIO_Port
+#define NODE_BUTTON_1_GPIO_Port GPIOA
 #endif
 
-#ifndef BUTTON_1_PULL_MODE
-#define BUTTON_1_PULL_MODE GPIO_PULLUP
+#ifndef NODE_BUTTON_1_Pin
+#define NODE_BUTTON_1_Pin GPIO_PIN_0
 #endif
 
-#ifndef BUTTON_1_ACTIVE_STATE
-#define BUTTON_1_ACTIVE_STATE GPIO_PIN_RESET
+#ifndef NODE_BUTTON_1_PULL_MODE
+#define NODE_BUTTON_1_PULL_MODE GPIO_PULLUP
 #endif
 
-#ifndef BUTTON_DEBOUNCE_MS
-#define BUTTON_DEBOUNCE_MS 40U
+#ifndef NODE_BUTTON_1_ACTIVE_STATE
+#define NODE_BUTTON_1_ACTIVE_STATE GPIO_PIN_RESET
+#endif
+
+#ifndef NODE_BUTTON_DEBOUNCE_MS
+#define NODE_BUTTON_DEBOUNCE_MS 40U
+#endif
+
+#ifndef NODE_OUTPUT_1_ID
+#define NODE_OUTPUT_1_ID 1U
+#endif
+
+#ifndef NODE_OUTPUT_1_PORT
+#define NODE_OUTPUT_1_PORT Output_1_GPIO_Port
+#endif
+
+#ifndef NODE_OUTPUT_1_PIN
+#define NODE_OUTPUT_1_PIN Output_1_Pin
+#endif
+
+#ifndef NODE_OUTPUT_2_ID
+#define NODE_OUTPUT_2_ID 2U
+#endif
+
+#ifndef NODE_OUTPUT_2_PORT
+#define NODE_OUTPUT_2_PORT Output_2_GPIO_Port
+#endif
+
+#ifndef NODE_OUTPUT_2_PIN
+#define NODE_OUTPUT_2_PIN Output_2_Pin
+#endif
+
+#ifndef NODE_OUTPUT_3_ID
+#define NODE_OUTPUT_3_ID 3U
+#endif
+
+#ifndef NODE_OUTPUT_3_PORT
+#define NODE_OUTPUT_3_PORT Output_3_GPIO_Port
+#endif
+
+#ifndef NODE_OUTPUT_3_PIN
+#define NODE_OUTPUT_3_PIN Output_3_Pin
 #endif
 
 #endif

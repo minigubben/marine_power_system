@@ -1,26 +1,50 @@
 #include "controller_app.h"
 
+#include "input_config.h"
 #include "main.h"
 #include "scenes.h"
 #include "shared/protocol.h"
 
 #include <stdbool.h>
-#include <string.h>
 
 static UART_HandleTypeDef *controller_uart = NULL;
-static protocol_parser_t controller_parser;
-static uint8_t controller_rx_byte = 0U;
-static volatile bool controller_frame_pending = false;
-static protocol_frame_t controller_pending_frame;
+static GPIO_PinState controller_last_raw_button_state = CONTROLLER_BUTTON_1_ACTIVE_STATE;
+static GPIO_PinState controller_stable_button_state = CONTROLLER_BUTTON_1_ACTIVE_STATE;
+static uint32_t controller_last_button_change_tick = 0U;
 
-static bool controller_start_receive(void)
+static void controller_init_button(void)
 {
-    if (controller_uart == NULL)
+    GPIO_InitTypeDef gpio_init = {0};
+
+    gpio_init.Pin = CONTROLLER_BUTTON_1_Pin;
+    gpio_init.Mode = GPIO_MODE_INPUT;
+    gpio_init.Pull = CONTROLLER_BUTTON_1_PULL_MODE;
+    HAL_GPIO_Init(CONTROLLER_BUTTON_1_GPIO_Port, &gpio_init);
+}
+
+static GPIO_PinState controller_button_read(void)
+{
+    return HAL_GPIO_ReadPin(CONTROLLER_BUTTON_1_GPIO_Port, CONTROLLER_BUTTON_1_Pin);
+}
+
+static bool controller_poll_button_press(void)
+{
+    const GPIO_PinState raw_state = controller_button_read();
+
+    if (raw_state != controller_last_raw_button_state)
     {
-        return false;
+        controller_last_raw_button_state = raw_state;
+        controller_last_button_change_tick = HAL_GetTick();
     }
 
-    return HAL_UART_Receive_IT(controller_uart, &controller_rx_byte, 1U) == HAL_OK;
+    if ((raw_state != controller_stable_button_state) &&
+        ((HAL_GetTick() - controller_last_button_change_tick) >= CONTROLLER_BUTTON_DEBOUNCE_MS))
+    {
+        controller_stable_button_state = raw_state;
+        return controller_stable_button_state == CONTROLLER_BUTTON_1_ACTIVE_STATE;
+    }
+
+    return false;
 }
 
 static bool controller_wait_for_tx_complete(uint32_t timeout_ms)
@@ -67,41 +91,38 @@ static bool controller_send_frame(uint8_t command, const uint8_t *payload, uint8
     return true;
 }
 
-static void controller_dispatch_frame(const protocol_frame_t *frame)
+static void controller_handle_scene_trigger(uint8_t source_node_id, uint8_t button_id)
 {
-    if ((frame->command == PROTOCOL_CMD_BUTTON_PRESSED) && (frame->payload_length == 2U))
+    uint8_t scene_id = 0U;
+
+    if (!scenes_find_binding(source_node_id, button_id, &scene_id))
     {
-        uint8_t scene_id = 0U;
+        return;
+    }
 
-        if (!scenes_find_binding(frame->payload[0], frame->payload[1], &scene_id))
+    if (!scenes_toggle(scene_id))
+    {
+        return;
+    }
+
+    {
+        const bool scene_active = scenes_get_state(scene_id);
+        size_t output_count = 0U;
+        const SceneOutput *outputs = scenes_get_outputs(scene_id, &output_count);
+
+        if (outputs == NULL)
         {
             return;
         }
 
-        if (!scenes_toggle(scene_id))
+        for (size_t i = 0U; i < output_count; ++i)
         {
-            return;
-        }
+            uint8_t payload[3];
 
-        {
-            const bool scene_active = scenes_get_state(scene_id);
-            size_t output_count = 0U;
-            const SceneOutput *outputs = scenes_get_outputs(scene_id, &output_count);
-
-            if (outputs == NULL)
-            {
-                return;
-            }
-
-            for (size_t i = 0U; i < output_count; ++i)
-            {
-                uint8_t payload[3];
-
-                payload[0] = outputs[i].target_node_id;
-                payload[1] = outputs[i].output_id;
-                payload[2] = scene_active ? 1U : 0U;
-                controller_send_frame(PROTOCOL_CMD_SET_OUTPUT_STATE, payload, sizeof(payload));
-            }
+            payload[0] = outputs[i].target_node_id;
+            payload[1] = outputs[i].output_id;
+            payload[2] = scene_active ? 1U : 0U;
+            controller_send_frame(PROTOCOL_CMD_SET_OUTPUT_STATE, payload, sizeof(payload));
         }
     }
 }
@@ -109,47 +130,16 @@ static void controller_dispatch_frame(const protocol_frame_t *frame)
 void controller_app_init(UART_HandleTypeDef *huart)
 {
     controller_uart = huart;
-    protocol_parser_init(&controller_parser);
-    memset((void *)&controller_pending_frame, 0, sizeof(controller_pending_frame));
-    controller_frame_pending = false;
     scenes_init();
-    controller_start_receive();
+    controller_init_button();
 }
 
 void controller_app_process(void)
 {
-    protocol_frame_t frame;
-    bool has_frame = false;
-
-    __disable_irq();
-    if (controller_frame_pending)
+    if (controller_poll_button_press())
     {
-        frame = controller_pending_frame;
-        controller_frame_pending = false;
-        has_frame = true;
+        controller_handle_scene_trigger(
+            CONTROLLER_INPUT_SOURCE_NODE_ID,
+            CONTROLLER_BUTTON_1_ID);
     }
-    __enable_irq();
-
-    if (has_frame)
-    {
-        controller_dispatch_frame(&frame);
-    }
-}
-
-void controller_app_rx_complete_callback(UART_HandleTypeDef *huart)
-{
-    protocol_frame_t frame;
-
-    if ((controller_uart == NULL) || (huart != controller_uart))
-    {
-        return;
-    }
-
-    if (protocol_parser_push_byte(&controller_parser, controller_rx_byte, &frame) != 0)
-    {
-        controller_pending_frame = frame;
-        controller_frame_pending = true;
-    }
-
-    controller_start_receive();
 }

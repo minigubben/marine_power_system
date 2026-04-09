@@ -1,5 +1,7 @@
 #include "scenes.h"
 
+#include "input_config.h"
+
 #include <stdbool.h>
 
 typedef struct
@@ -11,7 +13,7 @@ typedef struct
 } SceneDefinition;
 
 static const ButtonBinding button_bindings[] = {
-    {1U, 1U, 1U},
+    {CONTROLLER_INPUT_SOURCE_NODE_ID, CONTROLLER_BUTTON_1_ID, 1U},
 };
 
 static const SceneOutput scene_1_outputs[] = {

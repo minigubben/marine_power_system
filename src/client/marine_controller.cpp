@@ -17,15 +17,18 @@ typedef struct
 } OutputMapping;
 
 static const OutputMapping client_outputs[] = {
-    {1U, Output_1_GPIO_Port, Output_1_Pin},
-    {2U, Output_2_GPIO_Port, Output_2_Pin},
-    {3U, Output_3_GPIO_Port, Output_3_Pin},
+    {NODE_OUTPUT_1_ID, NODE_OUTPUT_1_PORT, NODE_OUTPUT_1_PIN},
+    {NODE_OUTPUT_2_ID, NODE_OUTPUT_2_PORT, NODE_OUTPUT_2_PIN},
+    {NODE_OUTPUT_3_ID, NODE_OUTPUT_3_PORT, NODE_OUTPUT_3_PIN},
 };
 
 static protocol_parser_t client_parser;
 static uint8_t client_rx_byte = 0U;
 static volatile bool client_frame_pending = false;
 static protocol_frame_t client_pending_frame;
+static GPIO_PinState client_last_raw_button_state = NODE_BUTTON_1_ACTIVE_STATE;
+static GPIO_PinState client_stable_button_state = NODE_BUTTON_1_ACTIVE_STATE;
+static uint32_t client_last_button_change_tick = 0U;
 
 static bool client_start_receive(void)
 {
@@ -36,20 +39,20 @@ static void client_init_button(void)
 {
     GPIO_InitTypeDef gpio_init = {0};
 
-    if (CLIENT_ROLE != CLIENT_ROLE_INPUT)
+    if (NODE_HAS_INPUTS == 0U)
     {
         return;
     }
 
-    gpio_init.Pin = BUTTON_1_Pin;
+    gpio_init.Pin = NODE_BUTTON_1_Pin;
     gpio_init.Mode = GPIO_MODE_INPUT;
-    gpio_init.Pull = BUTTON_1_PULL_MODE;
-    HAL_GPIO_Init(BUTTON_1_GPIO_Port, &gpio_init);
+    gpio_init.Pull = NODE_BUTTON_1_PULL_MODE;
+    HAL_GPIO_Init(NODE_BUTTON_1_GPIO_Port, &gpio_init);
 }
 
 static GPIO_PinState client_button_read(void)
 {
-    return HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin);
+    return HAL_GPIO_ReadPin(NODE_BUTTON_1_GPIO_Port, NODE_BUTTON_1_Pin);
 }
 
 static bool client_wait_for_tx_complete(uint32_t timeout_ms)
@@ -83,16 +86,19 @@ static bool client_send_frame(uint8_t command, const uint8_t *payload, uint8_t p
     if (HAL_UART_Transmit(&huart2, frame, (uint16_t)frame_length, 100U) != HAL_OK)
     {
         HAL_GPIO_WritePin(RS485_TX_EN_GPIO_Port, RS485_TX_EN_Pin, GPIO_PIN_RESET);
+        client_start_receive();
         return false;
     }
 
     if (!client_wait_for_tx_complete(100U))
     {
         HAL_GPIO_WritePin(RS485_TX_EN_GPIO_Port, RS485_TX_EN_Pin, GPIO_PIN_RESET);
+        client_start_receive();
         return false;
     }
 
     HAL_GPIO_WritePin(RS485_TX_EN_GPIO_Port, RS485_TX_EN_Pin, GPIO_PIN_RESET);
+    client_start_receive();
     return true;
 }
 
@@ -100,29 +106,26 @@ static void client_send_button_pressed(void)
 {
     uint8_t payload[2];
 
-    payload[0] = CLIENT_NODE_ID;
-    payload[1] = BUTTON_1_ID;
+    payload[0] = NODE_ID;
+    payload[1] = NODE_BUTTON_1_ID;
     client_send_frame(PROTOCOL_CMD_BUTTON_PRESSED, payload, sizeof(payload));
 }
 
 static bool client_poll_button_press(void)
 {
-    static GPIO_PinState last_raw_state = BUTTON_1_ACTIVE_STATE;
-    static GPIO_PinState stable_state = BUTTON_1_ACTIVE_STATE;
-    static uint32_t last_change_tick = 0U;
     const GPIO_PinState raw_state = client_button_read();
 
-    if (raw_state != last_raw_state)
+    if (raw_state != client_last_raw_button_state)
     {
-        last_raw_state = raw_state;
-        last_change_tick = HAL_GetTick();
+        client_last_raw_button_state = raw_state;
+        client_last_button_change_tick = HAL_GetTick();
     }
 
-    if ((raw_state != stable_state) &&
-        ((HAL_GetTick() - last_change_tick) >= BUTTON_DEBOUNCE_MS))
+    if ((raw_state != client_stable_button_state) &&
+        ((HAL_GetTick() - client_last_button_change_tick) >= NODE_BUTTON_DEBOUNCE_MS))
     {
-        stable_state = raw_state;
-        return stable_state == BUTTON_1_ACTIVE_STATE;
+        client_stable_button_state = raw_state;
+        return client_stable_button_state == NODE_BUTTON_1_ACTIVE_STATE;
     }
 
     return false;
@@ -130,6 +133,11 @@ static bool client_poll_button_press(void)
 
 static void client_set_output(output_id_t output_id, bool state)
 {
+    if (NODE_HAS_OUTPUTS == 0U)
+    {
+        return;
+    }
+
     for (size_t i = 0U; i < (sizeof(client_outputs) / sizeof(client_outputs[0])); ++i)
     {
         if (client_outputs[i].output_id == output_id)
@@ -145,7 +153,7 @@ static void client_set_output(output_id_t output_id, bool state)
 
 static void client_handle_frame(const protocol_frame_t *frame)
 {
-    if (CLIENT_ROLE != CLIENT_ROLE_OUTPUT)
+    if (NODE_HAS_OUTPUTS == 0U)
     {
         return;
     }
@@ -155,7 +163,7 @@ static void client_handle_frame(const protocol_frame_t *frame)
         return;
     }
 
-    if (frame->payload[0] != CLIENT_NODE_ID)
+    if (frame->payload[0] != NODE_ID)
     {
         return;
     }
@@ -196,7 +204,7 @@ int marineMain(void)
     {
         client_process_pending_frame();
 
-        if ((CLIENT_ROLE == CLIENT_ROLE_INPUT) && client_poll_button_press())
+        if ((NODE_HAS_INPUTS != 0U) && client_poll_button_press())
         {
             client_send_button_pressed();
         }
