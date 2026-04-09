@@ -31,8 +31,8 @@ The archived STM32CubeMX export remains under `legacy/cubemx/client`, but it is 
 
 The same source tree is built into two board profiles:
 
-- `8-outputs`: 8-output card
-- `6-inputs`: input-panel card with 6 inputs and 6 status outputs
+- `8-outputs-1..3`: 8-output card variants with `NODE_ID=10..12`
+- `6-inputs-1..3`: input-panel card variants with `NODE_ID=1..3`
 
 The implemented behavior is centered around UART receive interrupts on `USART2`, the shared protocol parser in `include/shared/protocol.h`, and separate bus/input/output modules.
 
@@ -151,13 +151,13 @@ The UART pin mux is common across both board profiles:
 - `USART2_TX` on `PA2`
 - `USART2_RX` on `PA3`
 
-Input-panel profile (`pio run -e 6-inputs`):
+Input-panel profile (`pio run -e 6-inputs-1`, `6-inputs-2`, or `6-inputs-3`):
 
 - `RS485_TX_EN_Pin` on `PA7`
 - outputs `OUT1..OUT6` on `PA12`, `PA8`, `PB14`, `PB12`, `PB10`, `PB1`
 - inputs `IN1..IN6` on `PA11`, `PB15`, `PB13`, `PB11`, `PB2`, `PB0`
 
-8-output profile (`pio run -e 8-outputs`):
+8-output profile (`pio run -e 8-outputs-1`, `8-outputs-2`, or `8-outputs-3`):
 
 - `RS485_TX_EN_Pin` on `PB10`
 - outputs `C1..C8` on `PC13`, `PB9`, `PB8`, `PB7`, `PB6`, `PB5`, `PB4`, `PA15`
